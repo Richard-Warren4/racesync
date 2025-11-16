@@ -1,0 +1,290 @@
+openapi: 3.0.3
+info:
+  title: RaceSync Schedule API
+  description: |
+    API specification for fetching Le Mans Ultimate race schedules.
+    This contract defines the future integration with RaceControl.gg or similar services.
+    MVP uses embedded sample data matching this schema.
+  version: 1.0.0
+  contact:
+    name: RaceSync Development
+    email: dev@racesync.app
+
+servers:
+  - url: https://api.racecontrol.gg/v1
+    description: Production RaceControl.gg API (future)
+  - url: http://localhost:3000/api/v1
+    description: Local development mock server
+
+paths:
+  /schedules/lmu:
+    get:
+      summary: Get Le Mans Ultimate race schedule
+      description: |
+        Fetches current and upcoming race schedule for Le Mans Ultimate.
+        Returns daily races, weekly races, and special events.
+      operationId: getLMUSchedule
+      tags:
+        - Schedules
+      parameters:
+        - name: from
+          in: query
+          description: Start date for schedule range (ISO 8601)
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: "2025-11-15T00:00:00Z"
+        - name: to
+          in: query
+          description: End date for schedule range (ISO 8601, max 7 days from 'from')
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: "2025-11-22T23:59:59Z"
+        - name: type
+          in: query
+          description: Filter by race type
+          required: false
+          schema:
+            type: string
+            enum: [daily, weekly, special, all]
+            default: all
+      responses:
+        '200':
+          description: Successfully retrieved race schedule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleResponse'
+              examples:
+                fullSchedule:
+                  summary: Complete schedule with all race types
+                  value:
+                    schedule:
+                      daily:
+                        - id: "550e8400-e29b-41d4-a716-446655440000"
+                          type: "daily"
+                          tier: "beginner"
+                          trackName: "Monza"
+                          trackConfiguration: "Grand Prix"
+                          carClass: "LMP2"
+                          startTime: "2025-11-15T14:00:00Z"
+                          durationMinutes: 15
+                          weatherCondition: "Clear"
+                          timeOfDay: "Afternoon"
+                          licenseRequirement: "Bronze"
+                          repeatInterval: 40
+                      weekly:
+                        - id: "660e8400-e29b-41d4-a716-446655440001"
+                          type: "weekly"
+                          tier: null
+                          trackName: "Spa-Francorchamps"
+                          trackConfiguration: "Endurance"
+                          carClass: "Hypercar"
+                          startTime: "2025-11-19T19:00:00Z"
+                          durationMinutes: 45
+                          weatherCondition: "Dynamic"
+                          timeOfDay: "Sunset"
+                          licenseRequirement: "Silver"
+                          repeatInterval: null
+                      special:
+                        - id: "770e8400-e29b-41d4-a716-446655440002"
+                          type: "special"
+                          tier: null
+                          trackName: "Le Mans"
+                          trackConfiguration: "24 Hours Circuit"
+                          carClass: "Multi-class"
+                          startTime: "2025-12-15T14:00:00Z"
+                          durationMinutes: 360
+                          weatherCondition: "Real Weather"
+                          timeOfDay: "Full Day Cycle"
+                          licenseRequirement: "Gold"
+                          repeatInterval: null
+                    metadata:
+                      generatedAt: "2025-11-15T12:00:00Z"
+                      validUntil: "2025-11-16T12:00:00Z"
+                      source: "racecontrol.gg"
+        '400':
+          description: Bad request - invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Invalid date range"
+                message: "Date range cannot exceed 7 days"
+                code: "INVALID_RANGE"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Internal server error"
+                message: "Failed to fetch schedule from upstream source"
+                code: "UPSTREAM_ERROR"
+
+components:
+  schemas:
+    ScheduleResponse:
+      type: object
+      required:
+        - schedule
+        - metadata
+      properties:
+        schedule:
+          type: object
+          properties:
+            daily:
+              type: array
+              items:
+                $ref: '#/components/schemas/Race'
+              description: Daily repeating races (A, B, C categories)
+            weekly:
+              type: array
+              items:
+                $ref: '#/components/schemas/Race'
+              description: Weekly races (Tuesday/Thursday evenings)
+            special:
+              type: array
+              items:
+                $ref: '#/components/schemas/Race'
+              description: Special events (endurance races, championships)
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+
+    Race:
+      type: object
+      required:
+        - id
+        - type
+        - trackName
+        - carClass
+        - startTime
+        - durationMinutes
+        - weatherCondition
+        - timeOfDay
+        - licenseRequirement
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique stable identifier for the race
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        type:
+          type: string
+          enum: [daily, weekly, special]
+          description: Race category
+          example: "daily"
+        tier:
+          type: string
+          enum: [beginner, intermediate, advanced]
+          nullable: true
+          description: Skill tier (only for daily races)
+          example: "beginner"
+        trackName:
+          type: string
+          description: Circuit name
+          example: "Monza"
+        trackConfiguration:
+          type: string
+          nullable: true
+          description: Track layout variant
+          example: "Grand Prix"
+        carClass:
+          type: string
+          enum: [LMP2, Hypercar, LMGT3, Multi-class]
+          description: Car category
+          example: "LMP2"
+        startTime:
+          type: string
+          format: date-time
+          description: Race start time in UTC (ISO 8601)
+          example: "2025-11-15T14:00:00Z"
+        durationMinutes:
+          type: integer
+          minimum: 1
+          description: Race duration in minutes
+          example: 15
+        weatherCondition:
+          type: string
+          enum: [Clear, Dynamic, Real Weather]
+          description: Weather type
+          example: "Clear"
+        timeOfDay:
+          type: string
+          enum: [Morning, Afternoon, Sunset, Night, Full Day Cycle]
+          description: Time of day progression
+          example: "Afternoon"
+        licenseRequirement:
+          type: string
+          enum: [Bronze, Silver, Gold]
+          description: Minimum safety rating required
+          example: "Bronze"
+        repeatInterval:
+          type: integer
+          minimum: 1
+          nullable: true
+          description: Minutes between repeats (daily races only)
+          example: 40
+
+    Metadata:
+      type: object
+      required:
+        - generatedAt
+        - validUntil
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+          description: When this schedule was generated
+          example: "2025-11-15T12:00:00Z"
+        validUntil:
+          type: string
+          format: date-time
+          description: When this schedule expires (24h cache)
+          example: "2025-11-16T12:00:00Z"
+        source:
+          type: string
+          description: Data source identifier
+          example: "racecontrol.gg"
+
+    Error:
+      type: object
+      required:
+        - error
+        - message
+        - code
+      properties:
+        error:
+          type: string
+          description: Error title
+          example: "Invalid date range"
+        message:
+          type: string
+          description: Detailed error message
+          example: "Date range cannot exceed 7 days"
+        code:
+          type: string
+          description: Machine-readable error code
+          example: "INVALID_RANGE"
+        details:
+          type: object
+          additionalProperties: true
+          description: Additional error context
+          example:
+            requestedDays: 10
+            maxDays: 7
+
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for RaceControl.gg (future authentication)
+
+security:
+  - apiKey: []

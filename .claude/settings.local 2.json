@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd:*)",
+      "Bash(.specify/scripts/bash/create-new-feature.sh --json --number 1 --short-name \"lmu-schedule-tracker\" \"Build RaceSync, a mobile application that helps sim racers track race schedules and plan practice sessions for Le Mans Ultimate.\")",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh --json --paths-only)",
+      "Bash(.specify/scripts/bash/update-agent-context.sh claude)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh --json)",
+      "Bash(git add .specify/ specs/ CLAUDE.md README.md)",
+      "Bash(git commit -m \"$(cat <<''EOF''\ndocs: add complete specification for LMU race schedule tracker (001)\n\nAdd comprehensive project documentation and specifications:\n\nConstitution & Project Setup:\n- RaceSync constitution v1.0.0 with 5 core principles\n- Mobile-first UX, component independence, TDD requirements\n- Performance constraints, privacy-first data handling\n- Project templates and workflow automation scripts\n\nFeature Specification (001-lmu-schedule-tracker):\n- Complete feature spec with 7 prioritized user stories\n- Clarifications session resolving data refresh, loading states\n- Success criteria and acceptance scenarios for each story\n- Out of scope items clearly documented\n\nTechnical Planning:\n- Implementation plan with React Native + TypeScript stack\n- Research decisions for dependencies and patterns\n- Data model with 6 entities and storage schema\n- API contract (OpenAPI 3.0) for future integration\n- Quickstart guide for developer onboarding\n\nTask Breakdown:\n- 134 tasks organized by user story (P1-P3 priorities)\n- TDD test tasks with specific file paths\n- Parallel execution opportunities marked\n- MVP scope (50 tasks) and incremental delivery strategy\n\nAll artifacts ready for implementation via /speckit.implement\nor hybrid approach using claude.ai web + local development.\n\n🤖 Generated with Claude Code\nhttps://claude.com/claude-code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push -u origin 001-lmu-schedule-tracker)",
+      "Bash(git fetch --all)",
+      "Bash(git checkout claude/racesync-type-definitions-t017-t022-01EVY2gjS5m3C34nhaJ4RaZp)",
+      "Bash(git checkout:*)",
+      "Bash(npx react-native@latest init RaceSync --template react-native-template-typescript --skip-install)",
+      "Bash(npx @react-native-community/cli@latest init RaceSync --template react-native-template-typescript --skip-install)",
+      "Bash(npx @react-native-community/cli@latest init RaceSyncTemp --skip-git)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git fetch:*)",
+      "Bash(npm test:*)",
+      "Bash(git add:*)",
+      "Bash(npm run ios:*)",
+      "Bash(tee:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

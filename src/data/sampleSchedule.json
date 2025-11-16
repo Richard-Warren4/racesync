@@ -1,0 +1,160 @@
+{
+  "dailyRaces": {
+    "tierA": [
+      {
+        "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+        "type": "daily",
+        "tier": "beginner",
+        "trackName": "Daytona International Speedway",
+        "trackConfiguration": "Road Course",
+        "carClass": "LMP2",
+        "startTime": "2025-11-15T18:00:00Z",
+        "durationMinutes": 30,
+        "weatherCondition": "Clear",
+        "timeOfDay": "Afternoon",
+        "licenseRequirement": "Bronze",
+        "repeatInterval": 120,
+        "isLive": false
+      },
+      {
+        "id": "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+        "type": "daily",
+        "tier": "beginner",
+        "trackName": "Monza",
+        "trackConfiguration": "Grand Prix",
+        "carClass": "LMP2",
+        "startTime": "2025-11-15T20:00:00Z",
+        "durationMinutes": 30,
+        "weatherCondition": "Dynamic",
+        "timeOfDay": "Morning",
+        "licenseRequirement": "Bronze",
+        "repeatInterval": 120,
+        "isLive": false
+      }
+    ],
+    "tierB": [
+      {
+        "id": "c3d4e5f6-a7b8-4c9d-8e1f-2a3b4c5d6e7f",
+        "type": "daily",
+        "tier": "intermediate",
+        "trackName": "Circuit de la Sarthe",
+        "trackConfiguration": "24h Layout",
+        "carClass": "Hypercar",
+        "startTime": "2025-11-15T16:30:00Z",
+        "durationMinutes": 45,
+        "weatherCondition": "Dynamic",
+        "timeOfDay": "Afternoon",
+        "licenseRequirement": "Silver",
+        "repeatInterval": 120,
+        "isLive": true
+      },
+      {
+        "id": "d4e5f6a7-b8c9-4d0e-9f2a-3b4c5d6e7f8a",
+        "type": "daily",
+        "tier": "intermediate",
+        "trackName": "Spa-Francorchamps",
+        "trackConfiguration": "Grand Prix",
+        "carClass": "Hypercar",
+        "startTime": "2025-11-15T19:00:00Z",
+        "durationMinutes": 45,
+        "weatherCondition": "Real Weather",
+        "timeOfDay": "Sunset",
+        "licenseRequirement": "Silver",
+        "repeatInterval": 120,
+        "isLive": false
+      }
+    ],
+    "tierC": [
+      {
+        "id": "e5f6a7b8-c9d0-4e1f-8a3b-4c5d6e7f8a9b",
+        "type": "daily",
+        "tier": "advanced",
+        "trackName": "Sebring International Raceway",
+        "trackConfiguration": "12 Hours Layout",
+        "carClass": "LMGT3",
+        "startTime": "2025-11-15T17:15:00Z",
+        "durationMinutes": 60,
+        "weatherCondition": "Clear",
+        "timeOfDay": "Night",
+        "licenseRequirement": "Gold",
+        "repeatInterval": 120,
+        "isLive": false
+      },
+      {
+        "id": "f6a7b8c9-d0e1-4f2a-9b4c-5d6e7f8a9b0c",
+        "type": "daily",
+        "tier": "advanced",
+        "trackName": "Watkins Glen",
+        "trackConfiguration": "Long Course",
+        "carClass": "LMGT3",
+        "startTime": "2025-11-15T21:00:00Z",
+        "durationMinutes": 60,
+        "weatherCondition": "Dynamic",
+        "timeOfDay": "Full Day Cycle",
+        "licenseRequirement": "Gold",
+        "repeatInterval": 120,
+        "isLive": false
+      }
+    ]
+  },
+  "weeklyRaces": [
+    {
+      "id": "a7b8c9d0-e1f2-4a3b-8c5d-6e7f8a9b0c1d",
+      "type": "weekly",
+      "trackName": "Circuit de la Sarthe",
+      "trackConfiguration": "No Chicanes",
+      "carClass": "Multi-class",
+      "startTime": "2025-11-17T14:00:00Z",
+      "durationMinutes": 90,
+      "weatherCondition": "Real Weather",
+      "timeOfDay": "Full Day Cycle",
+      "licenseRequirement": "Silver",
+      "repeatInterval": null,
+      "isLive": false
+    },
+    {
+      "id": "b8c9d0e1-f2a3-4b4c-9d6e-7f8a9b0c1d2e",
+      "type": "weekly",
+      "trackName": "Spa-Francorchamps",
+      "trackConfiguration": "Grand Prix",
+      "carClass": "Hypercar",
+      "startTime": "2025-11-18T19:00:00Z",
+      "durationMinutes": 60,
+      "weatherCondition": "Dynamic",
+      "timeOfDay": "Sunset",
+      "licenseRequirement": "Silver",
+      "repeatInterval": null,
+      "isLive": false
+    }
+  ],
+  "specialEvents": [
+    {
+      "id": "c9d0e1f2-a3b4-4c5d-8e7f-8a9b0c1d2e3f",
+      "type": "special",
+      "trackName": "Circuit de la Sarthe",
+      "trackConfiguration": "24h Layout",
+      "carClass": "Multi-class",
+      "startTime": "2025-11-22T14:00:00Z",
+      "durationMinutes": 360,
+      "weatherCondition": "Real Weather",
+      "timeOfDay": "Full Day Cycle",
+      "licenseRequirement": "Gold",
+      "repeatInterval": null,
+      "isLive": false
+    },
+    {
+      "id": "d0e1f2a3-b4c5-4d6e-9f8a-9b0c1d2e3f4a",
+      "type": "special",
+      "trackName": "Monza",
+      "trackConfiguration": "Historic Grand Prix",
+      "carClass": "Hypercar",
+      "startTime": "2025-11-29T12:00:00Z",
+      "durationMinutes": 240,
+      "weatherCondition": "Dynamic",
+      "timeOfDay": "Afternoon",
+      "licenseRequirement": "Gold",
+      "repeatInterval": null,
+      "isLive": false
+    }
+  ]
+}
