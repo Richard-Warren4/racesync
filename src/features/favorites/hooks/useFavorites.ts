@@ -1,7 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { Favorite } from '../types/Favorite';
 import type { FavoritesRepository } from '../services/FavoritesRepository';
 import { AsyncStorageFavoritesRepository } from '../services/AsyncStorageFavoritesRepository';
+
+// Create singleton repository instance to avoid re-creating on every render
+const defaultRepository = new AsyncStorageFavoritesRepository();
 
 interface UseFavoritesResult {
   /**
@@ -55,8 +58,11 @@ interface UseFavoritesResult {
  * @returns Object with favorites state and management functions
  */
 export function useFavorites(
-  repository: FavoritesRepository = new AsyncStorageFavoritesRepository()
+  repository?: FavoritesRepository
 ): UseFavoritesResult {
+  // Use provided repository or default singleton
+  const repo = repository || defaultRepository;
+
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -66,7 +72,7 @@ export function useFavorites(
   const loadFavorites = useCallback(async () => {
     try {
       setIsLoading(true);
-      const loadedFavorites = await repository.getFavorites();
+      const loadedFavorites = await repo.getFavorites();
       setFavorites(loadedFavorites);
     } catch (error) {
       console.error('Error loading favorites:', error);
@@ -74,7 +80,7 @@ export function useFavorites(
     } finally {
       setIsLoading(false);
     }
-  }, [repository]);
+  }, [repo]);
 
   /**
    * Initial load of favorites
@@ -105,7 +111,7 @@ export function useFavorites(
           notificationEnabled,
         };
 
-        await repository.addFavorite(favorite);
+        await repo.addFavorite(favorite);
 
         // Update local state
         setFavorites((prev) => {
@@ -120,7 +126,7 @@ export function useFavorites(
         throw error;
       }
     },
-    [repository]
+    [repo]
   );
 
   /**
@@ -129,7 +135,7 @@ export function useFavorites(
   const removeFavorite = useCallback(
     async (raceId: string): Promise<void> => {
       try {
-        await repository.removeFavorite(raceId);
+        await repo.removeFavorite(raceId);
 
         // Update local state
         setFavorites((prev) => prev.filter((f) => f.raceId !== raceId));
@@ -138,7 +144,7 @@ export function useFavorites(
         throw error;
       }
     },
-    [repository]
+    [repo]
   );
 
   /**
