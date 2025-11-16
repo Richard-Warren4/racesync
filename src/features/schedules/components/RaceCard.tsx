@@ -23,6 +23,7 @@ import { useCountdownTimer } from '../hooks/useCountdownTimer';
 import { formatTimeRange } from '../../../shared/utils/formatters';
 import { SPACING } from '../../../shared/constants/spacing';
 import { RACE_COLORS } from '../../../shared/constants/raceTypes';
+import { FavoriteButton } from '../../favorites/components/FavoriteButton';
 
 interface RaceCardProps {
   /** Race data to display */
@@ -56,21 +57,24 @@ export const RaceCard: React.FC<RaceCardProps> = ({ race, index = 0 }) => {
       style={[styles.card, { borderLeftColor: typeColor }]}
       testID={`race-card-${index}`}
     >
-      {/* Top row: Track name and car class */}
+      {/* Top row: Track name, car class, and favorite button */}
       <View style={styles.topRow}>
-        <Text
-          style={styles.trackName}
-          numberOfLines={1}
-          testID={`race-card-${index}-track-name`}
-        >
-          {race.trackName}
-        </Text>
-        <Text
-          style={styles.carClass}
-          testID={`race-card-${index}-car-class`}
-        >
-          {race.carClass}
-        </Text>
+        <View style={styles.topLeftContent}>
+          <Text
+            style={styles.trackName}
+            numberOfLines={1}
+            testID={`race-card-${index}-track-name`}
+          >
+            {race.trackName}
+          </Text>
+          <Text
+            style={styles.carClass}
+            testID={`race-card-${index}-car-class`}
+          >
+            {race.carClass}
+          </Text>
+        </View>
+        <FavoriteButton raceId={race.id} />
       </View>
 
       {/* Track configuration (if exists) */}
@@ -148,6 +152,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: SPACING.xs,
+  },
+  topLeftContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: SPACING.sm,
   },
   trackName: {
     fontSize: 18,

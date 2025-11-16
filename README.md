@@ -1,97 +1,153 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# RaceSync
 
-# Getting Started
+A React Native mobile app for tracking race schedules and managing favorites.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+### User Story 5: Favorite Races for Quick Access ✅
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- **Favorite/Unfavorite Races**: Tap the star icon on any race card to add it to favorites
+- **Persistent Favorites**: Favorites are saved to device storage and persist across app restarts
+- **Smart Filtering**: Filter races to show only your favorited races
+- **Automatic Cleanup**: Favorites are automatically removed when races are deleted from the schedule
+- **Schedule Updates**: Favorite status is preserved when race details are updated
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+## Project Structure
 
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+```
+racesync/
+├── src/
+│   ├── features/
+│   │   ├── favorites/
+│   │   │   ├── components/
+│   │   │   │   └── FavoriteButton.tsx
+│   │   │   ├── hooks/
+│   │   │   │   └── useFavorites.ts
+│   │   │   ├── services/
+│   │   │   │   ├── FavoritesRepository.ts
+│   │   │   │   └── AsyncStorageFavoritesRepository.ts
+│   │   │   └── types/
+│   │   │       └── Favorite.ts
+│   │   └── schedules/
+│   │       ├── components/
+│   │       │   └── RaceCard.tsx
+│   │       ├── services/
+│   │       │   ├── ScheduleMerger.ts
+│   │       │   └── RaceFilter.ts
+│   │       └── types/
+│   │           └── Race.ts
+│   └── shared/
+│       └── constants/
+│           └── storageKeys.ts
+├── __tests__/
+│   ├── unit/
+│   │   └── features/
+│   │       ├── favorites/
+│   │       │   └── services/
+│   │       │       └── FavoritesRepository.test.ts
+│   │       └── schedules/
+│   │           └── services/
+│   │               └── ScheduleMerger.test.ts
+│   └── integration/
+│       └── favorites-persistence.test.ts
+└── specs/
+    └── 001-lmu-schedule-tracker/
+        └── tasks.md
 ```
 
-## Step 2: Build and run your app
+## Technology Stack
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+- **React Native**: Cross-platform mobile development
+- **TypeScript**: Strict type checking (no `any` types)
+- **AsyncStorage**: Persistent local storage
+- **Jest**: Testing framework
+- **React Testing Library**: Component testing
 
-### Android
+## Development
 
-```sh
-# Using npm
-npm run android
+### Installation
 
-# OR using Yarn
-yarn android
+```bash
+npm install
 ```
 
-### iOS
+### Running Tests
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+```bash
+# Run all tests
+npm test
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+# Run unit tests only
+npm test:unit
 
-```sh
-bundle install
+# Run integration tests only
+npm test:integration
 ```
 
-Then, and every time you update your native dependencies, run:
+### TypeScript
 
-```sh
-bundle exec pod install
+This project uses TypeScript strict mode. All code is fully typed with no `any` types used.
+
+## Key Components
+
+### FavoriteButton
+
+A reusable button component that displays a star icon and toggles favorite status.
+
+- **Location**: `src/features/favorites/components/FavoriteButton.tsx`
+- **Props**: `raceId`, `size`, `favoritedColor`, `unfavoritedColor`, `onToggle`, `enableNotifications`
+- **Size**: 115 lines (under 200 line requirement)
+
+### useFavorites Hook
+
+React hook for managing favorite state and persistence.
+
+- **Location**: `src/features/favorites/hooks/useFavorites.ts`
+- **Returns**: `favorites`, `isLoading`, `isFavorite`, `toggleFavorite`, `addFavorite`, `removeFavorite`, `refresh`
+
+### FavoritesRepository
+
+Interface for managing favorite persistence with AsyncStorage implementation.
+
+- **Interface**: `src/features/favorites/services/FavoritesRepository.ts`
+- **Implementation**: `src/features/favorites/services/AsyncStorageFavoritesRepository.ts`
+- **Storage Key**: `racesync:favorites`
+
+## Data Models
+
+### Race
+
+```typescript
+interface Race {
+  id: string;
+  name: string;
+  startTime: Date;
+  endTime: Date;
+  location: string;
+  category: string;
+  description?: string;
+  isFavorited?: boolean;
+}
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Favorite
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```typescript
+interface Favorite {
+  raceId: string;
+  favoritedAt: Date;
+  notificationEnabled: boolean;
+}
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Testing
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+All features are developed using Test-Driven Development (TDD):
 
-## Step 3: Modify your app
+1. ✅ Unit tests for FavoritesRepository
+2. ✅ Unit tests for ScheduleMerger with favorites
+3. ✅ Integration tests for favorites persistence
 
-Now that you have successfully run the app, let's make changes!
+## License
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+MIT

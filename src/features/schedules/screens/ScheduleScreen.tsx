@@ -22,6 +22,7 @@ import {
 } from 'react-native';
 import { useRaceSchedule } from '../hooks/useRaceSchedule';
 import { useRaceFilters } from '../hooks/useRaceFilters';
+import { useFavorites } from '../../favorites/hooks/useFavorites';
 import { SkeletonLoader } from '../components/SkeletonLoader';
 import { RaceList } from '../components/RaceList';
 import { FilterBar } from '../components/FilterBar';
@@ -84,11 +85,13 @@ export const ScheduleScreen: React.FC = () => {
     isLoading: isFilterLoading,
   } = useRaceFilters();
 
+  const { favorites } = useFavorites();
+
   // Filter races based on selected filter
-  // TODO: favoriteIds will come from useFavorites hook in User Story 5
   const filteredRaces = useMemo(() => {
-    return applyFilter(races, selectedFilter, []);
-  }, [races, selectedFilter]);
+    const favoriteIds = favorites.map(f => f.raceId);
+    return applyFilter(races, selectedFilter, favoriteIds);
+  }, [races, selectedFilter, favorites]);
 
   // Show skeleton loader during initial load
   if (isLoading) {
